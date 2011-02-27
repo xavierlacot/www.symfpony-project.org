@@ -6,17 +6,17 @@
 <!--[if (gt IE 9)|!(IE)]><!--> <html lang="en" class="no-js"> <!--<![endif]-->
 <head>
 	<meta charset="UTF-8">
-	
+
   <title>Symfpony-Project.org - REST webservice with symfony1 &amp; Symfony2</title>
-	
+
 	<meta name="description" content="Differences between symfony 1 and Symfony2 on a REST webservice application.">
 	<meta name="author" content="Xavier Lacot, Damien Alexandre">
-	
+
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	
+
 	<link rel="shortcut icon" href="favicon.ico">
-  
+
   <link href="syntaxhighlighter/styles/shCore.css" type="text/css" rel="stylesheet" />
   <link href="syntaxhighlighter/styles/shThemeFadeToGrey.css" type="text/css" rel="stylesheet" />
 	<link rel="stylesheet" href="/css/style.css?v=2">
@@ -35,13 +35,19 @@
 			<nav>
 				<ul>
 					<li><a href="#t_routing">Routing</a></li>
-					<li><a href="#">navigation</a></li>
+					<li><a href="#t_format">Output &amp; format</a></li>
 					<li><a href="#">links</a></li>
 				</ul>
 			</nav>
 		</header>
 	</div>
 	<div id="main" class="wrapper">
+
+    <article>
+      <p>This lovely page is part of a Symfony Live 2011 talk about REST webservices with symfony and Symfony2.</p>
+    </article>
+
+
 		<article>
 			<header>
 				<h2 id="t_routing">Routing</h2>
@@ -49,50 +55,88 @@
 			</header>
       <div class="symfony">
         <h3>symfony</h3>
-        <p>bla bla to do</p>
+        <p>The routing of symfony is quite powerfull. You can use different matching / generating classes (like <strong>sfDoctrineRoute</strong>), generate route collections...</p>
         <pre class="brush: yaml; gutter: false;">
-pony_list:
-  url: /pony.:sf_format
-  param: { module: pony, action: index, sf_format: xml }
-  class: sfRequestRoute
-  requirements: { sf_method: GET, sf_format: (xml|json|yml) }
+          pony_list:
+            url: /pony.:sf_format
+            param: { module: pony, action: index, sf_format: xml }
+            class: sfRequestRoute
+            requirements: { sf_method: GET, sf_format: (xml|json|yml) }
 
-pony_show:
-  url: /pony/:slug.:sf_format
-  param: { module: pony, action: show, sf_format: xml }
-  class: sfDoctrineRoute
-  options: { model: Pony, column: slug, type: object }
-  requirements: { sf_method: GET, sf_format: (xml|json|yml) }
+          pony_show:
+            url: /pony/:slug.:sf_format
+            param: { module: pony, action: show, sf_format: xml }
+            class: sfDoctrineRoute
+            options: { model: Pony, column: slug, type: object }
+            requirements: { sf_method: GET, sf_format: (xml|json|yml) }
         </pre>
       </div>
       <div class="symfony2">
         <h3>Symfony2</h3>
 				<p>The Router component is quite simpler than the symfony one's, it's all about matching pattern and generating URL ONLY.</p>
         <p>Here is the configuration file, nothing much to say about it, but look at the <strong>_controller</strong> parameter: no more action / module - you just
-          declare a callable controller - can be anything.</p>
+          declare a callable controller - can be anything, even a static method from a custom class.</p>
 
         <pre class="brush: yaml; gutter: false;">
-pony_list:
-    pattern:      /pony.{_format}
-    defaults:     { _controller: CleverAgeSymfponyBundle:Default:index, _format: xml }
-    requirements: { _format: (xml|json), _method: GET }
+          pony_list:
+              pattern:      /pony.{_format}
+              defaults:     { _controller: CleverAgeSymfponyBundle:Default:index, _format: xml }
+              requirements: { _format: (xml|json), _method: GET }
 
-pony_show:
-    pattern:      /pony/{slug}.{_format}
-    defaults:     { _controller: CleverAgeSymfponyBundle:Default:show, _format: xml }
-    requirements: { _format: (xml|json), _method: GET, slug: "[a-z0-9-]+" }
+          pony_show:
+              pattern:      /pony/{slug}.{_format}
+              defaults:     { _controller: CleverAgeSymfponyBundle:Default:show, _format: xml }
+              requirements: { _format: (xml|json), _method: GET, slug: "[a-z0-9-]+" }
         </pre>
       </div>
       <footer>
         <h3>Conclusion</h3>
 				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam sodales urna non odio egestas tempor. Nunc vel vehicula ante. Etiam bibendum iaculis libero, eget molestie nisl pharetra in. In semper consequat est, eu porta velit mollis nec. Curabitur posuere enim eget turpis feugiat tempor.</p>
-			</footer>	
+			</footer>
+		</article>
+
+
+    <article>
+			<header>
+				<h2 id="t_format">Output format</h2>
+				<p>There is no true serializer in symfony, but Symfony2 introduce a Serializer component. Here is how to encode in Xml Pony in both of them.</p>
+			</header>
+      <div class="symfony">
+        <h3>symfony</h3>
+        <p>As there is no Serializer component, we must use the Doctrine Dumper. It works fine but we will not be able to customize it.</p>
+        <pre class="brush: php; gutter: false;">
+          $query = // New DoctrineQuery fetching some ponies!
+          $query->execute()->exportTo('xml'); // Will return a well formed XML
+        </pre>
+        <p>
+          It's quick &amp; dirty, there is no CDATA, no namespace... But it's the only solution out of the box.
+        </p>
+      </div>
+      <div class="symfony2">
+        <h3>Symfony2</h3>
+				<p>Introducing the new Serializer component, composed of Normalizers and Encoders:<br />
+          the Normalizer transform Entities into php array, and the encoder... encode them into Json or Xml.</p>
+
+        <pre class="brush: php; gutter: false;">
+          use Symfony\Component\Serializer;
+
+          $serializer = new Serializer\Serializer();
+          $serializer->addNormalizer(new Serializer\Normalizer\CustomNormalizer());
+          $serializer->setEncoder('xml', new Serializer\Encoder\XmlEncoder());
+
+          $serializer->encode($pony, 'xml');
+        </pre>
+      </div>
+      <footer>
+        <h3>Conclusion</h3>
+				<p>If you can, take the Symfony2 Serializer component into your symfony 1 webservice. For XML encoding it's really nice. Require PHP 5.3.</p>
+			</footer>
 		</article>
 	</div>
 	<div id="footer-container">
 		<footer class="wrapper">
       <p>
-        
+        This webpage is <strike>buttyfull</strike> provided by Xavier Lacot &amp; Damien Alexandre.
       </p>
 		</footer>
 	</div>
