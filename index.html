@@ -109,7 +109,7 @@
           $query->execute()->exportTo('xml'); // Will return a well formed XML
         </pre>
         <p>
-          It's quick &amp; dirty, there is no CDATA, no namespace... But it's the only solution out of the box.
+          It's quick &amp; dirty, there is no CDATA, no namespace... But it's the only solution out of the box. And there is also no way to do reverse this process.
         </p>
       </div>
       <div class="symfony2">
@@ -124,7 +124,9 @@
           $serializer->addNormalizer(new Serializer\Normalizer\CustomNormalizer());
           $serializer->setEncoder('xml', new Serializer\Encoder\XmlEncoder());
 
-          $serializer->encode($pony, 'xml');
+          $xml_pony = $serializer->encode($pony, 'xml');
+
+          $pony_from_xml = $serializer->decode($xml_pony, 'xml');
         </pre>
       </div>
       <footer>
