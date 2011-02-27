@@ -36,7 +36,7 @@
 				<ul>
 					<li><a href="#t_routing">Routing</a></li>
 					<li><a href="#t_format">Output &amp; format</a></li>
-					<li><a href="#">links</a></li>
+					<li><a href="#t_input">Input format</a></li>
 				</ul>
 			</nav>
 		</header>
@@ -132,6 +132,40 @@
       <footer>
         <h3>Conclusion</h3>
 				<p>If you can, take the Symfony2 Serializer component into your symfony 1 webservice. For XML encoding it's really nice. Require PHP 5.3.</p>
+			</footer>
+		</article>
+
+
+    <article>
+			<header>
+				<h2 id="t_input">Input format</h2>
+				<p>When using PUT and POST methods, you want to translate the requested XML or Json into an object (a Pony to be precise).</p>
+			</header>
+      <div class="symfony">
+        <h3>symfony</h3>
+        <p>Hum...</p>
+        <pre class="brush: php; gutter: false;">
+          magic_method_from_somewhere();
+        </pre>
+        <p>
+          Good luck.
+        </p>
+      </div>
+      <div class="symfony2">
+        <h3>Symfony2</h3>
+				<p>The Serializer component is able to do this for us.</p>
+
+        <pre class="brush: php; gutter: false;">
+          use Symfony\Component\Serializer;
+
+          $serializer = new Serializer\Serializer();
+
+          // todo
+        </pre>
+      </div>
+      <footer>
+        <h3>Conclusion</h3>
+				<p>There is no clean solution out of symfony 1, I recommand you to use a plugin (sfDoctrineRestGeneratorPlugin) or to make your own.</p>
 			</footer>
 		</article>
 	</div>
