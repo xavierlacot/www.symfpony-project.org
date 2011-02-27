@@ -1,83 +1,114 @@
 <!DOCTYPE html>
-<html>
+<!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]-->
+<!--[if IE 7 ]>    <html lang="en" class="no-js ie7"> <![endif]-->
+<!--[if IE 8 ]>    <html lang="en" class="no-js ie8"> <![endif]-->
+<!--[if IE 9 ]>    <html lang="en" class="no-js ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html lang="en" class="no-js"> <!--<![endif]-->
 <head>
-  <meta charset='utf-8'>
-
-  <title>xavierlacot/www.symfpony-project.org @ GitHub</title>
-
-  <style type="text/css">
-    body {
-      margin-top: 1.0em;
-      background-color: #e62bb7;
-      font-family: "Helvetica,Arial,FreeSans";
-      color: #000000;
-    }
-    #container {
-      margin: 0 auto;
-      width: 700px;
-    }
-    h1 { font-size: 3.8em; color: #19d448; margin-bottom: 3px; }
-    h1 .small { font-size: 0.4em; }
-    h1 a { text-decoration: none }
-    h2 { font-size: 1.5em; color: #19d448; }
-    h3 { text-align: center; color: #19d448; }
-    a { color: #19d448; }
-    .description { font-size: 1.2em; margin-bottom: 30px; margin-top: 30px; font-style: italic;}
-    .download { float: right; }
-    pre { background: #000; color: #fff; padding: 15px;}
-    hr { border: 0; width: 80%; border-bottom: 1px solid #aaa}
-    .footer { text-align:center; padding-top:30px; font-style: italic; }
-  </style>
-</head>
-
-<body>
-  <a href="http://github.com/xavierlacot/www.symfpony-project.org"><img style="position: absolute; top: 0; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub" /></a>
-
-  <div id="container">
-
-    <div class="download">
-      <a href="http://github.com/xavierlacot/www.symfpony-project.org/zipball/master">
-        <img border="0" width="90" src="http://github.com/images/modules/download/zip.png"></a>
-      <a href="http://github.com/xavierlacot/www.symfpony-project.org/tarball/master">
-        <img border="0" width="90" src="http://github.com/images/modules/download/tar.png"></a>
-    </div>
-
-    <h1><a href="http://github.com/xavierlacot/www.symfpony-project.org">www.symfpony-project.org</a>
-      <span class="small">by <a href="http://github.com/xavierlacot">xavierlacot</a></span></h1>
-
-    <div class="description">
-      symfpony-project.org
-    </div>
-
-    <p>Main Project Text</p><h2>Dependencies</h2>
-<p>Dependencies</p>
-<h2>Install</h2>
-<p>Installation Instructions</p>
-<h2>License</h2>
-<p>Code License</p>
-<h2>Authors</h2>
-<p>Authors</p>
-<h2>Contact</h2>
-<p>Contact</p>
-
-
-    <h2>Download</h2>
-    <p>
-      You can download this project in either
-      <a href="http://github.com/xavierlacot/www.symfpony-project.org/zipball/master">zip</a> or
-      <a href="http://github.com/xavierlacot/www.symfpony-project.org/tarball/master">tar</a> formats.
-    </p>
-    <p>You can also clone the project with <a href="http://git-scm.com">Git</a>
-      by running:
-      <pre>$ git clone git://github.com/xavierlacot/www.symfpony-project.org</pre>
-    </p>
-
-    <div class="footer">
-      get the source code on GitHub : <a href="http://github.com/xavierlacot/www.symfpony-project.org">xavierlacot/www.symfpony-project.org</a>
-    </div>
-
-  </div>
-
+	<meta charset="UTF-8">
+	
+  <title>Symfpony-Project.org - REST webservice with symfony1 &amp; Symfony2</title>
+	
+	<meta name="description" content="Differences between symfony 1 and Symfony2 on a REST webservice application.">
+	<meta name="author" content="Xavier Lacot, Damien Alexandre">
+	
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+	<link rel="shortcut icon" href="favicon.ico">
   
+  <link href="syntaxhighlighter/styles/shCore.css" type="text/css" rel="stylesheet" />
+  <link href="syntaxhighlighter/styles/shThemeFadeToGrey.css" type="text/css" rel="stylesheet" />
+	<link rel="stylesheet" href="/css/style.css?v=2">
+
+
+	<!--[if lt IE 9]>
+	<script src="js/libs/html5shiv.js"></script>
+	<![endif]-->
+</head>
+<body onload="prettyPrint()">
+
+  <div id="header-container">
+		<header class="wrapper">
+			<h1 id="title"><a href="./">Symf<span>(</span>p<span>)</span>ony-Project.org</a></h1>
+      <img src="images/logo.png" alt="Symfpony logo" />
+			<nav>
+				<ul>
+					<li><a href="#t_routing">Routing</a></li>
+					<li><a href="#">navigation</a></li>
+					<li><a href="#">links</a></li>
+				</ul>
+			</nav>
+		</header>
+	</div>
+	<div id="main" class="wrapper">
+		<article>
+			<header>
+				<h2 id="t_routing">Routing</h2>
+				<p>The component in charge of finding the right controller to execute from a browser request.</p>
+			</header>
+      <div class="symfony">
+        <h3>symfony</h3>
+        <p>bla bla to do</p>
+        <pre class="brush: yaml; gutter: false;">
+pony_list:
+  url: /pony.:sf_format
+  param: { module: pony, action: index, sf_format: xml }
+  class: sfRequestRoute
+  requirements: { sf_method: GET, sf_format: (xml|json|yml) }
+
+pony_show:
+  url: /pony/:slug.:sf_format
+  param: { module: pony, action: show, sf_format: xml }
+  class: sfDoctrineRoute
+  options: { model: Pony, column: slug, type: object }
+  requirements: { sf_method: GET, sf_format: (xml|json|yml) }
+        </pre>
+      </div>
+      <div class="symfony2">
+        <h3>Symfony2</h3>
+				<p>The Router component is quite simpler than the symfony one's, it's all about matching pattern and generating URL ONLY.</p>
+        <p>Here is the configuration file, nothing much to say about it, but look at the <strong>_controller</strong> parameter: no more action / module - you just
+          declare a callable controller - can be anything.</p>
+
+        <pre class="brush: yaml; gutter: false;">
+pony_list:
+    pattern:      /pony.{_format}
+    defaults:     { _controller: CleverAgeSymfponyBundle:Default:index, _format: xml }
+    requirements: { _format: (xml|json), _method: GET }
+
+pony_show:
+    pattern:      /pony/{slug}.{_format}
+    defaults:     { _controller: CleverAgeSymfponyBundle:Default:show, _format: xml }
+    requirements: { _format: (xml|json), _method: GET, slug: "[a-z0-9-]+" }
+        </pre>
+      </div>
+      <footer>
+        <h3>Conclusion</h3>
+				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam sodales urna non odio egestas tempor. Nunc vel vehicula ante. Etiam bibendum iaculis libero, eget molestie nisl pharetra in. In semper consequat est, eu porta velit mollis nec. Curabitur posuere enim eget turpis feugiat tempor.</p>
+			</footer>	
+		</article>
+	</div>
+	<div id="footer-container">
+		<footer class="wrapper">
+      <p>
+        
+      </p>
+		</footer>
+	</div>
+
+	<!--[if lt IE 7 ]>
+	<script src="js/libs/dd_belatedpng.js"></script>
+	<script> DD_belatedPNG.fix('img, .png_bg');</script>
+	<![endif]-->
+
+  <script type="text/javascript" src="syntaxhighlighter/scripts/shCore.js"></script>
+  <script type="text/javascript" src="syntaxhighlighter/scripts/shBrushPhp.js"></script>
+  <script type="text/javascript" src="syntaxhighlighter/scripts/shBrushYaml.js"></script>
+  <script type="text/javascript" src="syntaxhighlighter/scripts/shBrushXml.js"></script>
+  <script type="text/javascript" src="syntaxhighlighter/scripts/shBrushPlain.js"></script>
+  <script type="text/javascript">
+       SyntaxHighlighter.all()
+  </script>
 </body>
 </html>
