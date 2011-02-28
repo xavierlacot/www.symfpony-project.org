@@ -26,7 +26,7 @@
 	<script src="js/libs/html5shiv.js"></script>
 	<![endif]-->
 </head>
-<body onload="prettyPrint()">
+<body>
 
   <div id="header-container">
 		<header class="wrapper">
@@ -35,8 +35,8 @@
 			<nav>
 				<ul>
 					<li><a href="#t_routing">Routing</a></li>
-					<li><a href="#t_format">Output &amp; format</a></li>
-					<li><a href="#t_input">Input format</a></li>
+					<li><a href="#t_validation">Validation</a></li>
+          <li><a href="#t_format">Output &amp; format</a></li>
 				</ul>
 			</nav>
 		</header>
@@ -98,6 +98,72 @@
       <footer>
         <h3>Conclusion</h3>
 				<p>Routers doesn't have the same philosophy but their configurations are quite similar.</p>
+			</footer>
+		</article>
+
+    
+		<article>
+			<header>
+				<h2 id="t_validation">Validation</h2>
+				<p>The Validation process has been entirely refactored from symfony.</p>
+			</header>
+      <div class="symfony">
+        <h3>symfony</h3>
+        <p>There is two validators declaration: one in sfForm, the other in Doctrine. They can't work together so we useally use the sfValidators from sfForm.</p>
+
+        <pre class="brush: php; gutter: false;">
+          $pony_form = new PonyForm();
+          
+          $pony_form->bind($values);
+
+          if ($pony_form->isValid())
+          {
+            // You can save the Pony here
+          }
+        </pre>
+      </div>
+      <div class="symfony2">
+        <h3>Symfony2</h3>
+				<p>You define the fields validators directly from your Entities, or any other Class, or even from Yaml / Xml / Php file. Write once, use anywhere.</p>
+
+        <pre class="brush: php; gutter: false;">
+          class Pony
+          {
+              /**
+               * @var integer $id
+               *
+               * @orm:Column(name="id", type="integer")
+               * @orm:Id
+               * @orm:GeneratedValue(strategy="IDENTITY")
+               */
+              private $id;
+
+              /**
+               * @var string $name
+               *
+               * @gedmo:Sluggable
+               * @orm:Column(name="name", type="string", length=110)
+               * @validation:NotBlank()
+               * @validation:MinLength(3)
+               */
+              private $name;
+        </pre>
+        <pre class="brush: php; gutter: false;">
+          $validator = $this->get('validator');
+
+          if (0 === count($validator->validate($pony)))
+          {
+            // Pony is valid \o/
+          }
+        </pre>
+
+        <p>
+          There is a lot more to say about validation, don't hesitate to take a look at the whole <a href="https://github.com/xavierlacot/symfpony-project.org">SymfponyBundle</a> and the <a href="http://docs.symfony-reloaded.org/guides/validator/overview.html">official documentation</a>.
+        </p>
+      </div>
+      <footer>
+        <h3>Conclusion</h3>
+				<p>Validation is supported by both frameworks, again with two differents philosophies.</p>
 			</footer>
 		</article>
 
