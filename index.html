@@ -44,7 +44,8 @@
 	<div id="main" class="wrapper">
 
     <article>
-      <p>This lovely page is part of a Symfony Live 2011 talk about REST webservices with symfony and Symfony2.</p>
+      <p>This page is part of a Symfony Live 2011 talk about REST webservices with symfony and Symfony2.<br />
+      His aim is to compare the frameworks best pratices / out of the box solutions for creating a REST web service over HTTP.</p>
     </article>
 
 
@@ -56,6 +57,7 @@
       <div class="symfony">
         <h3>symfony</h3>
         <p>The routing of symfony is quite powerfull. You can use different matching / generating classes (like <strong>sfDoctrineRoute</strong>), generate route collections...</p>
+        
         <pre class="brush: yaml; gutter: false;">
           pony_list:
             url: /pony.:sf_format
@@ -73,7 +75,7 @@
       </div>
       <div class="symfony2">
         <h3>Symfony2</h3>
-				<p>The Router component is quite simpler than the symfony one's, it's all about matching pattern and generating URL ONLY.</p>
+				<p>The Router component is quite simpler than the symfony one's, it's all about matching pattern and generating URL <strong>ONLY</strong>.</p>
         <p>Here is the configuration file, nothing much to say about it, but look at the <strong>_controller</strong> parameter: no more action / module - you just
           declare a callable controller - can be anything, even a static method from a custom class.</p>
 
@@ -88,10 +90,14 @@
               defaults:     { _controller: CleverAgeSymfponyBundle:Default:show, _format: xml }
               requirements: { _format: (xml|json), _method: GET, slug: "[a-z0-9-]+" }
         </pre>
+
+        <p>
+          Take a look at <a href="http://bundles.symfony-reloaded.org/frameworkextrabundle/annotations/converters.html">ParamConverter</a> if you want a sfDoctrineRoute-like input.
+        </p>
       </div>
       <footer>
         <h3>Conclusion</h3>
-				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam sodales urna non odio egestas tempor. Nunc vel vehicula ante. Etiam bibendum iaculis libero, eget molestie nisl pharetra in. In semper consequat est, eu porta velit mollis nec. Curabitur posuere enim eget turpis feugiat tempor.</p>
+				<p>Routers doesn't have the same philosophy but their configurations are quite similar.</p>
 			</footer>
 		</article>
 
@@ -106,10 +112,11 @@
         <p>As there is no Serializer component, we must use the Doctrine Dumper. It works fine but we will not be able to customize it.</p>
         <pre class="brush: php; gutter: false;">
           $query = // New DoctrineQuery fetching some ponies!
-          $query->execute()->exportTo('xml'); // Will return a well formed XML
+          $query->execute()->exportTo('xml');
         </pre>
         <p>
-          It's quick &amp; dirty, there is no CDATA, no namespace... But it's the only solution out of the box. And there is also no way to do reverse this process.
+          It's quick &amp; dirty, there is no CDATA, no namespace... But it's the only solution out of the box.<br />
+          You can use <strong>Doctrine_Parser::load</strong> and <strong>fromArray()</strong> to reverse the process.
         </p>
       </div>
       <div class="symfony2">
@@ -120,60 +127,38 @@
         <pre class="brush: php; gutter: false;">
           use Symfony\Component\Serializer;
 
+          // Init the Serializer
           $serializer = new Serializer\Serializer();
           $serializer->addNormalizer(new Serializer\Normalizer\CustomNormalizer());
           $serializer->setEncoder('xml', new Serializer\Encoder\XmlEncoder());
 
-          $xml_pony = $serializer->encode($pony, 'xml');
+          $xml_pony = $serializer->encode($pony, 'xml'); // Return an XML string
 
-          $pony_from_xml = $serializer->decode($xml_pony, 'xml');
+          $pony_from_xml = $serializer->denormalizeObject( // Return a Pony instance
+            $serializer->decode($xml_pony, 'xml'), // Return an array from the XML
+            'CleverAge\SymfponyBundle\Entity\Pony',
+            'xml'
+          );
         </pre>
       </div>
       <footer>
         <h3>Conclusion</h3>
-				<p>If you can, take the Symfony2 Serializer component into your symfony 1 webservice. For XML encoding it's really nice. Require PHP 5.3.</p>
+				<p>If you can, take the Symfony2 Serializer component into your symfony 1 webservice (you only need PHP 5.3).</p>
 			</footer>
 		</article>
 
 
-    <article>
-			<header>
-				<h2 id="t_input">Input format</h2>
-				<p>When using PUT and POST methods, you want to translate the requested XML or Json into an object (a Pony to be precise).</p>
-			</header>
-      <div class="symfony">
-        <h3>symfony</h3>
-        <p>Hum...</p>
-        <pre class="brush: php; gutter: false;">
-          magic_method_from_somewhere();
-        </pre>
-        <p>
-          Good luck.
-        </p>
-      </div>
-      <div class="symfony2">
-        <h3>Symfony2</h3>
-				<p>The Serializer component is able to do this for us.</p>
-
-        <pre class="brush: php; gutter: false;">
-          use Symfony\Component\Serializer;
-
-          $serializer = new Serializer\Serializer();
-
-          // todo
-        </pre>
-      </div>
-      <footer>
-        <h3>Conclusion</h3>
-				<p>There is no clean solution out of symfony 1, I recommand you to use a plugin (sfDoctrineRestGeneratorPlugin) or to make your own.</p>
-			</footer>
-		</article>
 	</div>
 	<div id="footer-container">
 		<footer class="wrapper">
       <p>
         This webpage is <strike>buttyfull</strike> provided by <a href="http://lacot.org/">Xavier Lacot</a> &amp;
-        <a href="http://damienalexandre.fr/" onclick="cornify_add();cornify_add();cornify_add();return false;">Damien Alexandre</a> from <a href="http://www.clever-age.com/">Clever Age</a>.
+        <a href="http://damienalexandre.fr/" onclick="cornify_add();cornify_add();cornify_add();return false;">Damien Alexandre</a> from <a href="http://www.clever-age.com/">Clever Age</a>,
+        and hosted by <a href="http://github.com/">Github</a>.<br />
+        For more informations, please visit the official <a href="http://symfony-reloaded.org/">Symfony2</a> and <a href="http://www.symfony-project.org/">symfony</a> websites.
+      </p>
+      <p>
+        Original logo by <a href="http://www.extreme-sensio.com/">Extreme sensio</a>.
       </p>
 		</footer>
 	</div>
