@@ -30,13 +30,17 @@
 
   <div id="header-container">
 		<header class="wrapper">
+
+      <img src="images/pony.png" alt="Pony" class="png_bg" />
 			<h1 id="title"><a href="./">Symf<span>(</span>p<span>)</span>ony-Project.org</a></h1>
       <img src="images/logo.png" alt="Symfpony logo" class="png_bg" />
+      
 			<nav>
 				<ul>
 					<li><a href="#t_routing">Routing</a></li>
 					<li><a href="#t_validation">Validation</a></li>
           <li><a href="#t_format">Output &amp; format</a></li>
+          <li><a href="#t_cache">Caching ressources</a></li>
 				</ul>
 			</nav>
 		</header>
@@ -44,8 +48,9 @@
 	<div id="main" class="wrapper">
 
     <article>
-      <p>This page is part of a Symfony Live 2011 talk about REST webservices with symfony and Symfony2.<br />
-      His aim is to compare the frameworks best pratices / out of the box solutions for creating a REST web service over HTTP.</p>
+      <p>This page is part of our Symfony Live 2011 talk about REST webservices with symfony and Symfony2.<br />
+      There is major differences between the two framework, both can be list as RESTful but implementations are differents.<br />
+      The aim of this page is to compare the frameworks best pratices / out of the box solutions for creating a REST web service over HTTP.</p>
     </article>
 
 
@@ -210,6 +215,82 @@
       <footer>
         <h3>Conclusion</h3>
 				<p>If you can, take the Symfony2 Serializer component into your symfony 1 webservice (you only need PHP 5.3).</p>
+			</footer>
+		</article>
+
+
+    <article>
+			<header>
+				<h2 id="t_caching">Caching your Ressources</h2>
+				<p>Caching is realy important. You must set it up, even for a short time. Your server charge will definitelly thank you.</p>
+			</header>
+      <div class="symfony">
+        <h3>symfony</h3>
+        <p>The full page cache is setted in each application cache.yml and activated in settings.yml. Ressources will be stored on your serveur harddrive but
+        you can specify a custom store, like Memcached.</p>
+        <pre class="brush: yml; gutter: false;">
+          # settings.yml
+          prod:
+            .settings:
+              no_script_name:         true
+              cache:                  false
+
+          # cache.yml
+          default:
+            enabled:     true
+            with_layout: true
+            lifetime:    120
+        </pre>
+        <p>
+          Off course, only the safe method GET get his call stored in the cache.
+          <br />The invalidation is kind of easy too :</p>
+        <pre class="brush: php; gutter: false;">
+          if ($cache = $this->getContext()->getViewCacheManager())
+          {
+            $cache->remove('pony/index');
+            $cache->remove('pony/show?slug='.$slug);
+          }
+        </pre>
+      </div>
+      <div class="symfony2">
+        <h3>Symfony2</h3>
+				<p>The Symfony2 cache is... HTTP. In fact, there is no full page cache inside Symfony2. Check out 
+          the <a href="http://docs.symfony-reloaded.org/guides/cache/http.html">documentation</a> or the code bellow - the tips is
+        to use a reverse proxy and to set correctly our HTTP expiration and validation headers. No configuration needed !</p>
+
+        <pre class="brush: php; gutter: false;">
+          $response->setPublic();
+          $response->setSharedMaxAge(120);
+          return $response;
+        </pre>
+
+        <p>Our cache proxy will store this ressource for 120 secondes. The downside is that there is no invalidation method.<br />
+        So we couple the expiration with a validation method and reduce the expiration time.</p>
+
+        <pre class="brush: php; gutter: false;">
+          $response->setPublic();
+          $response->setSharedMaxAge(60);
+          $response->setETag(\md5(\serialize($pony))); // Should be a method in Pony
+
+          if ($response->isNotModified($request))
+          {
+              // return the 304 Response immediately
+              return $response;
+          }
+          else
+          {
+              // do some stuff and return a full response
+              $response->setContent(
+                  $this->getSerializer($_format)->encode($pony, $_format)
+              );
+              return $response;
+          }
+        </pre>
+      </div>
+      <footer>
+        <h3>Conclusion</h3>
+				<p>The full page cache of symfony 1 is king of slow, all the framework configuration, plugins, sessions... are loaded on each request.
+        Symfony2 fix this issue and is way more performant (I mean, cache proxy > PHP, obvious pony is obvious).</p>
 			</footer>
 		</article>
 
