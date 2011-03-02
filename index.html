@@ -34,13 +34,13 @@
       <img src="images/pony.png" alt="Pony" class="png_bg" />
 			<h1 id="title"><a href="./">Symf<span>(</span>p<span>)</span>ony-Project.org</a></h1>
       <img src="images/logo.png" alt="Symfpony logo" class="png_bg" />
-      
+
 			<nav>
 				<ul>
 					<li><a href="#t_routing">Routing</a></li>
 					<li><a href="#t_validation">Validation</a></li>
           <li><a href="#t_format">Output &amp; format</a></li>
-          <li><a href="#t_cache">Caching ressources</a></li>
+          <li><a href="#t_cache">Caching resources</a></li>
 				</ul>
 			</nav>
 		</header>
@@ -48,21 +48,35 @@
 	<div id="main" class="wrapper">
 
     <article>
-      <p>This page is part of our Symfony Live 2011 talk about REST webservices with symfony and Symfony2.<br />
-      There is major differences between the two framework, both can be list as RESTful but implementations are differents.<br />
-      The aim of this page is to compare the frameworks best pratices / out of the box solutions for creating a REST web service over HTTP.</p>
+      <p>
+        This page is part of our <a href="http://www.symfony-live.com/">Symfony Live 2011 talk</a>
+        about <abbr>REST</abbr> web services with <a href="http://www.symfony-project.org/">symfony</a> and
+        <a href="http://symfony-reloaded.org/">Symfony2</a>. There are major
+        differences between the two frameworks, which can both be
+        listed as RESTful, even if their REST implementations are different.
+      </p>
+      <p>
+        The aim of this page is to compare the frameworks best practices and
+        out-of-the-box solutions for creating a REST web service over HTTP.
+      </p>
     </article>
-
 
 		<article>
 			<header>
 				<h2 id="t_routing">Routing</h2>
-				<p>The component in charge of finding the right controller to execute from a browser request.</p>
+				<p>
+				  The component in charge of finding the right controller to execute
+				  from a browser request.
+				</p>
 			</header>
       <div class="symfony">
         <h3>symfony</h3>
-        <p>The routing of symfony is quite powerfull. You can use different matching / generating classes (like <strong>sfDoctrineRoute</strong>), generate route collections...</p>
-        
+        <p>
+          The routing of symfony is quite powerful. You can use different
+          matching and generating classes (like <code>sfDoctrineRoute</code>),
+          generate route collections...
+        </p>
+
         <pre class="brush: yaml; gutter: false;">
           pony_list:
             url: /pony.:sf_format
@@ -80,9 +94,16 @@
       </div>
       <div class="symfony2">
         <h3>Symfony2</h3>
-				<p>The Router component is quite simpler than the symfony one's, it's all about matching pattern and generating URL <strong>ONLY</strong>.</p>
-        <p>Here is the configuration file, nothing much to say about it, but look at the <strong>_controller</strong> parameter: no more action / module - you just
-          declare a callable controller - can be anything, even a static method from a custom class.</p>
+				<p>
+				  The Router component is quite simpler than the symfony one's, it's all
+				  about matching pattern and generating URL <em>ONLY</em>.
+				</p>
+        <p>
+          Here is the configuration file, nothing much to say about it, but look
+          at the <code>_controller</code> parameter: no more action / module -
+          you just declare a callable controller. It can be anything, even a
+          static method from a custom class.
+        </p>
 
         <pre class="brush: yaml; gutter: false;">
           pony_list:
@@ -97,28 +118,35 @@
         </pre>
 
         <p>
-          Take a look at <a href="http://bundles.symfony-reloaded.org/frameworkextrabundle/annotations/converters.html">ParamConverter</a> if you want a sfDoctrineRoute-like input.
+          Take a look at <a href="http://bundles.symfony-reloaded.org/frameworkextrabundle/annotations/converters.html"><code>ParamConverter</code></a>
+          if you want a sfDoctrineRoute-like input.
         </p>
       </div>
       <footer>
         <h3>Conclusion</h3>
-				<p>Routers doesn't have the same philosophy but their configurations are quite similar.</p>
+				<p>
+				  Routers doesn't have the same philosophy, but their configurations are
+				  quite similar.
+				</p>
 			</footer>
 		</article>
 
-    
 		<article>
 			<header>
 				<h2 id="t_validation">Validation</h2>
-				<p>The Validation process has been entirely refactored from symfony.</p>
+				<p>The Validation process has been entirely rebuilt from symfony 1 to Symfony 2.</p>
 			</header>
       <div class="symfony">
         <h3>symfony</h3>
-        <p>There is two validators declaration: one in sfForm, the other in Doctrine. They can't work together so we useally use the sfValidators from sfForm.</p>
+        <p>
+          There are two validators declarations: one in <code>sfForm</code>,
+          the other in Doctrine. They can't work together, so we usually use
+          the sfValidators from sfForm.
+        </p>
 
         <pre class="brush: php; gutter: false;">
           $pony_form = new PonyForm();
-          
+
           $pony_form->bind($values);
 
           if ($pony_form->isValid())
@@ -129,7 +157,12 @@
       </div>
       <div class="symfony2">
         <h3>Symfony2</h3>
-				<p>You define the fields validators directly from your Entities, or any other Class, or even from Yaml / Xml / Php file. Write once, use anywhere.</p>
+				<p>
+				  You can define the fields validators directly in Entities or in any
+				  other Class, using the annotations, or even in separate
+				  <abbr>YAML</abbr> / <abbr>XML</abbr> / <abbr>PHP</abbr> files. Write once, use
+				  anywhere else.
+				</p>
 
         <pre class="brush: php; gutter: false;">
           class Pony
@@ -163,37 +196,58 @@
         </pre>
 
         <p>
-          There is a lot more to say about validation, don't hesitate to take a look at the whole <a href="https://github.com/xavierlacot/symfpony-project.org">SymfponyBundle</a> and the <a href="http://docs.symfony-reloaded.org/guides/validator/overview.html">official documentation</a>.
+          There is a lot more to say about validation, so don't hesitate to
+          take a look at the whole <a href="https://github.com/xavierlacot/symfpony-project.org">SymfponyBundle</a>
+          and the <a href="http://docs.symfony-reloaded.org/guides/validator/overview.html">official documentation</a>.
         </p>
       </div>
       <footer>
         <h3>Conclusion</h3>
-				<p>Validation is supported by both frameworks, again with two differents philosophies.</p>
+				<p>
+				  Validation is supported by both frameworks, once again with two
+				  different philosophies.
+				</p>
 			</footer>
 		</article>
-
 
     <article>
 			<header>
 				<h2 id="t_format">Output format</h2>
-				<p>There is no true serializer in symfony, but Symfony2 introduce a Serializer component. Here is how to encode in Xml Pony in both of them.</p>
+				<p>
+				  There is no true serializer concept in symfony, but Symfony2 introduces
+				  a Serializer component. Here is how to encode in <abbr>XML</abbr> Pony
+				  in both of them.
+				</p>
 			</header>
       <div class="symfony">
         <h3>symfony</h3>
-        <p>As there is no Serializer component, we must use the Doctrine Dumper. It works fine but we will not be able to customize it.</p>
+        <p>As there is no <code>Serializer</code> component, we must use the
+          Doctrine Dumper. It works fine but we will not be able to customise
+          its output.
+        </p>
         <pre class="brush: php; gutter: false;">
           $query = // New DoctrineQuery fetching some ponies!
           $query->execute()->exportTo('xml');
         </pre>
         <p>
-          It's quick &amp; dirty, there is no CDATA, no namespace... But it's the only solution out of the box.<br />
-          You can use <strong>Doctrine_Parser::load</strong> and <strong>fromArray()</strong> to reverse the process.
+          It is rather quick and dirty, there is no <code>CDATA</code>, no
+          <code>namespace</code>... But it is the only solution out of the box.
+          For decoding a payload, you may use <code>Doctrine_Parser::load</code>
+          and <code>fromArray()</code>.
         </p>
       </div>
       <div class="symfony2">
         <h3>Symfony2</h3>
-				<p>Introducing the new Serializer component, composed of Normalizers and Encoders:<br />
-          the Normalizer transform Entities into php array, and the encoder... encode them into Json or Xml.</p>
+				<p>
+				  Introducing the new <code>Serializer</code> component, composed of
+				  Normalizers and Encoders:
+				</p>
+				<ul>
+				  <li>
+            the normalizer transforms Entities into PHP arrays,
+          </li>
+          <li>and the encoder... encodes them into JSON or <abbr>XML</abbr> (or whatever).</li>
+        </ul>
 
         <pre class="brush: php; gutter: false;">
           use Symfony\Component\Serializer;
@@ -214,20 +268,31 @@
       </div>
       <footer>
         <h3>Conclusion</h3>
-				<p>If you can, take the Symfony2 Serializer component into your symfony 1 webservice (you only need PHP 5.3).</p>
+				<p>
+				  If you can, take the Symfony2 <code>Serializer</code> component into
+				  your symfony 1 web service (then, you will just be forced to use PHP
+				  5.3, as the component uses PHP namespaces).
+				</p>
 			</footer>
 		</article>
 
 
     <article>
 			<header>
-				<h2 id="t_cache">Caching your Ressources</h2>
-				<p>Caching is realy important. You must set it up, even for a short time. Your server charge will definitelly thank you.</p>
+				<h2 id="t_cache">Caching your Resources</h2>
+				<p>
+				  Caching is really important. You must set it up, even for a short time.
+				  Your server charge will definitely thank you.
+				</p>
 			</header>
       <div class="symfony">
         <h3>symfony</h3>
-        <p>The full page cache is setted in each application cache.yml and activated in settings.yml. Ressources will be stored on your serveur harddrive but
-        you can specify a custom store, like Memcached.</p>
+        <p>
+          The full page cache is set in each application <code>cache.yml</code>
+          and activated in <code>settings.yml</code>. Resources will be stored
+          on the server hard drive, but you can specify a custom store, like
+          Memcached for instance.
+        </p>
         <pre class="brush: yml; gutter: false;">
           # settings.yml
           prod:
@@ -242,8 +307,9 @@
             lifetime:    120
         </pre>
         <p>
-          Off course, only the safe method GET get his call stored in the cache.
-          <br />The invalidation is kind of easy too :</p>
+          Off course, only the safe method <code>GET</code> gets stored into
+          the cache. The invalidation is kind of easy too :
+        </p>
         <pre class="brush: php; gutter: false;">
           if ($cache = $this->getContext()->getViewCacheManager())
           {
@@ -254,9 +320,14 @@
       </div>
       <div class="symfony2">
         <h3>Symfony2</h3>
-				<p>The Symfony2 cache is... HTTP. In fact, there is no full page cache inside Symfony2. Check out 
-          the <a href="http://docs.symfony-reloaded.org/guides/cache/http.html">documentation</a> or the code bellow - the tips is
-        to use a reverse proxy and to set correctly our HTTP expiration and validation headers. No configuration needed!</p>
+				<p>
+				  The Symfony2 cache is... <abbr>HTTP</abbr>. In fact, there is no
+				  full page cache inside Symfony2. Check out the
+				  <a href="http://docs.symfony-reloaded.org/guides/cache/http.html">documentation</a>
+				  or the code below - the secret is to use a reverse-proxy, and to
+				  correctly set the HTTP expiration and validation headers. No
+				  configuration needed!
+				</p>
 
         <pre class="brush: php; gutter: false;">
           $response->setPublic();
@@ -264,8 +335,12 @@
           return $response;
         </pre>
 
-        <p>Our cache proxy will store this ressource for 120 secondes. The downside is that there is no invalidation method.<br />
-        So we couple the expiration with a validation method and reduce the expiration time.</p>
+        <p>
+          The cache proxy will store this resource for 120 seconds. The downside
+          is that there is no invalidation method. Therefore, it is possible to
+          associate the expiration to a validation method, which can reduce the
+          expiration time.
+        </p>
 
         <pre class="brush: php; gutter: false;">
           $response->setPublic();
@@ -279,7 +354,7 @@
           }
           else
           {
-              // do some stuff and return a full response
+              // do some stuff and return a full Response
               $response->setContent(
                   $this->getSerializer($_format)->encode($pony, $_format)
               );
@@ -289,19 +364,22 @@
       </div>
       <footer>
         <h3>Conclusion</h3>
-				<p>The full page cache of symfony 1 is kind of slow, all the framework configuration, plugins, sessions... are loaded on each request.
-        Symfony2 fix this issue and is way more performant (I mean, cache proxy > PHP, obvious pony is obvious).</p>
+				<p>
+				  The full page cache of symfony 1 is kind of slow, all the framework
+				  configuration, plugins, sessions... are loaded on each request!
+				  Symfony2 fixes this issue and is way more performant (cache proxy >
+				  <abbr>PHP</abbr>, obvious pony is obvious).
+				</p>
 			</footer>
 		</article>
-
-
 	</div>
 	<div id="footer-container">
 		<footer class="wrapper">
       <p>
         This webpage is <strike>buttyfull</strike> provided by <a href="http://lacot.org/">Xavier Lacot</a> &amp;
-        <a href="http://damienalexandre.fr/" onclick="cornify_add();cornify_add();cornify_add();this.onclick='';return false;">Damien Alexandre</a> from <a href="http://www.clever-age.com/">Clever Age</a>,
-        and hosted by <a href="http://github.com/">Github</a>.<br />
+        <a href="http://damienalexandre.fr/" onclick="cornify_add();cornify_add();cornify_add();this.onclick='';return false;">Damien Alexandre</a>
+        from <a href="http://www.clever-age.com/">Clever Age</a>,
+        and graciously hosted by <a href="http://github.com/">Github</a>.<br />
         For more informations, please visit the official <a href="http://symfony-reloaded.org/">Symfony2</a> and <a href="http://www.symfony-project.org/">symfony</a> websites.
       </p>
       <p>
